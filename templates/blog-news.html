@@ -1,0 +1,89 @@
+{% extends 'base-index.html' %}
+{% load staticfiles %}
+{% block style-scss %}
+    <!--blog-->
+    <link href="{% static 'scss/blog/blog.css' %}" rel="stylesheet">
+    <!--blog home-->
+    <link rel="stylesheet" href="{% static 'scss/blog/blog-home&news.css' %}">
+{% endblock %}
+{% block content_top %}
+<div class="filter" id="filter"></div>
+<!--banner-->
+<div class="banner banner-news">
+    <h2>STAR-PHONE<br>NEWS</h2>
+</div>
+<!--sub nav-->
+<div class="sub-nav">
+    <ul class="clearfix">
+        {% for nav in navbars %}
+            <li><a href="{{ nav.NavHref }}">{{ nav.NavName }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+{% block content %}
+<!--main-->
+<div class="tab-page">
+    <div class="page-container clearfix">
+        <!--search box-->
+        {% include 'base-blog-search.html' %}
+        <!--article-->
+        <div class="article">
+            <!--article main-->
+            <div class="article-inner">
+                {% for article in article_list %}
+                <div class="article-cell clearfix" id="{{ article.id }}">
+                    <div class="article-title"><a href="/blog/article/{{ article.id }}">{{ article.title | slice:'0:35' }}</a></div>
+                    <div class="article-source">
+                        <span class="article-origin">
+                            <span class="article-year">{{ article.date_publish | date:"Y. m. j" }}
+                                <span class="article-time">{{ article.date_publish | date:"H:i"}}</span></span>
+                            <span class="article-author">By: {{ article.author }}</span>
+                        </span>
+                        <ul class="article-share clearfix">
+                            <li>
+                                {% if request.user.is_authenticated %}
+                                <a href="javascript:void(0);">
+                                <i class="icon i-like"></i>
+                                <span class="like-count">{{ article.collect_count }}</span>
+                                </a>
+                                {% else %}
+                                <a href="/login">
+                                <span class="like-count">{{ article.collect_count }}</span>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li><a>
+                                <i class="icon i-praise"></i>
+                                <span class="praise-count">{{ article.click_count }}</span>
+                            </a></li>
+                            <li class="share-way">
+                                <i class="icon i-share"></i>
+                                <ul class="clearfix">
+                                    <li><a class="icon i-sina" href=""></a></li>
+                                    <li><a class="icon i-qzone" href=""></a></li>
+                                    <li><a class="icon i-douban" href=""></a></li>
+                                    <li><a class="icon i-wechat" href=""></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <a class="img-wrap" href="/blog/article/{{ article.id }}"><img src="/uploads/{{ article.top_img }}" alt=""></a>
+                    <div class="article-text">
+                        {{ article.desc }}
+                    </div>
+                    <a class="article-more" href="/blog/article/{{ article.id }}">
+                        <span class="more-icon">+</span>
+                        MORE
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <!--pagination-->
+            {% include 'blog-pagination.html' %}
+        </div>
+        <!--recommendation-->
+        {% include 'base-blog-hot.html' %}
+    </div>
+</div>
+{% endblock %}

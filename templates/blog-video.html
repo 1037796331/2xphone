@@ -1,0 +1,51 @@
+{% extends 'base-index.html' %}
+{% load staticfiles %}
+{% block style-scss %}
+    <!--blog-->
+    <link href="{% static 'scss/blog/blog.css' %}" rel="stylesheet">
+    <!--blog home-->
+    <link rel="stylesheet" href="{% static 'scss/blog/blog-v.css' %}">
+{% endblock %}
+{% block content_top %}
+<div class="filter" id="filter"></div>
+<!--banner-->
+<div class="banner banner-video">
+    <h2>STAR-PHONE<br>VIDEO</h2>
+</div>
+<!--sub nav-->
+<<div class="sub-nav">
+    <ul class="clearfix">
+        {% for nav in navbars %}
+            <li><a href="{{ nav.NavHref }}">{{ nav.NavName }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+{% block content %}
+<!--main-->
+<div class="tab-page">
+    <div class="page-container">
+        <ul class="video-inner">
+            {% for vid in video_list %}
+                {% if vid.id < 2 %}
+            <li class="video-big"><a href="{% url 'movie' vid.id %}">
+
+                <img src="/uploads/{{ vid.img_url }}" alt="">
+
+                <p class="video-desc">Star-Phone 发布会</p></a></li>
+                {% endif %}
+        {% endfor %}
+            <li class="video-small">
+                <ul>
+                    {% for vid in video_list %}
+                        {% if vid.id != 1 %}
+                    <li><a href="{% url 'movie' vid.id%}"><img src="/uploads/{{ vid.img_url }}" alt="">
+                        <p class="video-desc">{{ vid.name }}</p></a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
